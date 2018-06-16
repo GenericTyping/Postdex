@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:postdex/models/post.dart';
+import 'package:postdex/views/post_view.dart';
+
+import 'package:postdex/views/posts/text_post_view.dart';
 
 void main() => runApp(new MyApp());
 
@@ -6,11 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Postdex',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Postdex'),
     );
   }
 }
@@ -25,38 +29,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  Post testPost = Post.getExample();
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: new ListView(
+          children: Post.generateStubs(10).map((post) => PostView(post)).toList()
         ),
-        body: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text(
-                'You have pushed the button this many times:',
-              ),
-              new Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.display1,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: new Icon(Icons.add),
-        ));
+      ),
+    );
   }
 }
