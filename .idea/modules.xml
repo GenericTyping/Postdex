@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/postdex.iml" filepath="$PROJECT_DIR$/postdex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/postdex_android.iml" filepath="$PROJECT_DIR$/postdex_android.iml" />
+    </modules>
+  </component>
+</project>
