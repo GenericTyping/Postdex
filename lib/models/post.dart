@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
+import 'package:postdex/models/post_content.dart';
 import 'package:postdex/models/post_content_type.dart';
 import 'package:postdex/models/subreddit.dart';
 import 'package:postdex/models/comment.dart';
@@ -15,7 +16,7 @@ class Post {
       this.downvotes,
       this.submissionDate,
       this.comments,
-      this.contentType});
+      this.content});
 
   String title;
   User submitter;
@@ -26,7 +27,7 @@ class Post {
   int get score => upvotes - downvotes;
   DateTime submissionDate;
   List<Comment> comments;
-  PostContentType contentType;
+  PostContent content;
 
   static List<Post> generateStubs(int amount) {
     List<Post> result = [];
@@ -35,8 +36,10 @@ class Post {
       newPost.title = newPost.title + i.toString();
       newPost.upvotes = newPost.upvotes + i;
       newPost.downvotes = newPost.downvotes - i;
-      newPost.contentType =
-          ((i + 1) % 3 == 0) ? PostContentType.image : PostContentType.text;
+      if ((i + 1) % 3 == 0) {
+        newPost.content.type = PostContentType.image;
+        newPost.content.data = AssetImage("assets/images/placeholders/1.png");
+      }
       result.add(newPost);
     }
     return result;
@@ -49,6 +52,6 @@ class Post {
       upvotes: 420,
       downvotes: 69,
       submissionDate: DateTime.now(),
-      contentType: PostContentType.text,
+      content: PostContent(type: PostContentType.text, data: "ExampleContentText"),
       comments: <Comment>[Comment.getExample()]);
 }

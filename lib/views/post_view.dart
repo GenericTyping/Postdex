@@ -14,14 +14,13 @@ class PostView extends StatefulWidget {
 
 class _PostViewState extends State<PostView> {
   Widget _buildPostContent() {
-    switch (widget.post.contentType) {
+    switch (widget.post.content.type) {
       case PostContentType.text:
-        return Text("Post Content Text!");
+        return Text(widget.post.content.data);
       case PostContentType.image:
-        return Text("Post Content Image!",
-            style: TextStyle(fontStyle: FontStyle.italic));
+        return Image(image: widget.post.content.data);
       default:
-        return Text("Post Content Default!");
+        return Text("Some other form of content.");
     }
   }
 

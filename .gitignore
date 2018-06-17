@@ -243,3 +243,4 @@ DerivedData/
 !.vscode/extensions.json
 
 
+lib/_credentials.dart

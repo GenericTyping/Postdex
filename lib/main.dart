@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'package:postdex/models/_constants.dart';
 import 'package:postdex/models/post.dart';
 import 'package:postdex/views/post_view.dart';
 
-import 'package:postdex/views/posts/text_post_view.dart';
-
-void main() => runApp(new MyApp());
+void main() async => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -32,15 +32,31 @@ class _MyHomePageState extends State<MyHomePage> {
   Post testPost = Post.getExample();
 
   @override
+  initState() {
+    super.initState();
+    initializeReddit();
+  }
+
+  void initializeReddit() async {
+    await Constants.initializeReddit();
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-        child: new ListView(
-          children: Post.generateStubs(10).map((post) => PostView(post)).toList()
-        ),
+        child: (Constants.reddit == null)
+            ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.teal))
+            : ListView(
+                children: Post
+                    .generateStubs(10)
+                    .map((post) => PostView(post))
+                    .toList()),
       ),
     );
   }
