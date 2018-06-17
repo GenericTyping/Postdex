@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:postdex/models/post.dart';
 import 'package:postdex/models/post_content_type.dart';
 
@@ -13,28 +16,80 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
+  Text _buildPostTitle() => Text(widget.post.title,
+      style: TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white));
+
   Widget _buildPostContent() {
     switch (widget.post.content.type) {
       case PostContentType.text:
-        return Text(widget.post.content.data);
+        return _buildPostContentText();
       case PostContentType.image:
-        return Image(image: widget.post.content.data);
+        return _buildPostContentImage();
       default:
         return Text("Some other form of content.");
     }
   }
 
+  Widget _buildPostContentImage() {
+    return Image(
+      image: widget.post.content.data,
+      fit: BoxFit.cover,
+      height: 300.0,
+      width: double.infinity,
+    );
+  }
+
+  Widget _buildPostContentText() {
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MarkdownBody(data: widget.post.content.data, onTapLink: launch),
+    );
+  }
+
+  Widget _buildPostControls() => Row(
+        children: <Widget>[
+          Text(
+            widget.post.upvotes.toString(),
+            style: TextStyle(
+              color: Colors.teal[800],
+            ),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Divider(),
-        Text(widget.post.title, style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(widget.post.submitter.username,
-            style: TextStyle(fontStyle: FontStyle.italic)),
-        _buildPostContent()
-      ],
+    return Card(
+      margin: const EdgeInsets.all(10.0),
+      shape: RoundedRectangleBorder(),
+      elevation: 3.0,
+      child: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.teal[300],
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Row(
+                children: <Widget>[
+                  _buildPostTitle(),
+                ],
+              ),
+            ),
+          ),
+          _buildPostContent(),
+          new Container(
+              color: Colors.teal[100],
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Row(
+                  children: <Widget>[
+                    _buildPostControls(),
+                  ],
+                ),
+              ))
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:postdex/models/_constants.dart';
 
 import 'package:postdex/models/post_content.dart';
 import 'package:postdex/models/post_content_type.dart';
@@ -36,7 +37,9 @@ class Post {
       newPost.title = newPost.title + i.toString();
       newPost.upvotes = newPost.upvotes + i;
       newPost.downvotes = newPost.downvotes - i;
-      if ((i + 1) % 3 == 0) {
+      if ((i + 1) % 8 == 0) {
+        newPost.content.data = Constants.loremIpsum;
+      } else if ((i + 1) % 3 == 0) {
         newPost.content.type = PostContentType.image;
         newPost.content.data = AssetImage("assets/images/placeholders/1.png");
       }
@@ -52,6 +55,7 @@ class Post {
       upvotes: 420,
       downvotes: 69,
       submissionDate: DateTime.now(),
-      content: PostContent(type: PostContentType.text, data: "ExampleContentText"),
+      content:
+          PostContent(type: PostContentType.text, data: "ExampleContentText"),
       comments: <Comment>[Comment.getExample()]);
 }
