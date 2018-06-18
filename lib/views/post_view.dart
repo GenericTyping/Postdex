@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import 'package:postdex/models/post.dart';
 import 'package:postdex/models/post_content_type.dart';
@@ -47,16 +48,30 @@ class _PostViewState extends State<PostView> {
     );
   }
 
-  Widget _buildPostControls() => Row(
-        children: <Widget>[
-          Text(
-            widget.post.upvotes.toString(),
-            style: TextStyle(
-              color: Colors.teal[800],
-            ),
-          ),
-        ],
+  Widget _buildPostControls() {
+    Widget _buildControlBlock({IconData icon, String value}) {
+      return Row(
+        children: <Widget>[Icon(icon, color: Colors.teal[800]), Text(value)],
       );
+    }
+
+    Widget _scoreBlock = _buildControlBlock(
+        icon: Icons.arrow_upward, value: widget.post.score.toString());
+    Widget _submitterBlock = _buildControlBlock(
+        icon: Icons.person, value: widget.post.submitter.username);
+    Widget _dateBlock = _buildControlBlock(
+        icon: Icons.calendar_today,
+        value: DateFormat.yMd('nl').format(widget.post.submissionDate));
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        _scoreBlock,
+        _submitterBlock,
+        _dateBlock
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +97,7 @@ class _PostViewState extends State<PostView> {
               color: Colors.teal[100],
               child: new Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: new Row(
-                  children: <Widget>[
-                    _buildPostControls(),
-                  ],
-                ),
+                child: _buildPostControls(),
               ))
         ],
       ),

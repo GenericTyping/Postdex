@@ -4,13 +4,13 @@ import 'package:postdex/_credentials.dart';
 class Constants {
   static Reddit reddit;
 
-  static void initializeReddit() async {
+  static void initializeRedditUser(String username, String password) async {
     Constants.reddit = await Reddit.createInstance(
       clientId: kClientId,
       clientSecret: kSecret,
       userAgent: kAgentName,
-      username: kUsername,
-      password: kPassword,
+      username: username,
+      password: password,
     );
   }
 
