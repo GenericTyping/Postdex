@@ -8,7 +8,7 @@ import 'package:postdex/models/post.dart';
 import 'package:postdex/models/post_content_type.dart';
 
 class PostView extends StatefulWidget {
-  PostView(this.post);
+  PostView({Key key, this.post}) : super(key: key);
 
   final Post post;
 
@@ -17,9 +17,37 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
-  Text _buildPostTitle() => Text(widget.post.title,
-      style: TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white));
+  IconData redditIcon = IconData(0xeac6, fontFamily: "icomoon");
+
+  Widget _buildPostTitle() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              widget.post.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: Colors.white,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Chip(
+            avatar: CircleAvatar(
+              child: Icon(
+                redditIcon,
+                color: Colors.white,
+                size: 15.0,
+              ),
+              backgroundColor: Colors.teal,
+            ),
+            label: Text(widget.post.subreddit),
+            labelStyle: TextStyle(color: Colors.teal),
+            backgroundColor: Colors.white,
+          )
+        ],
+      );
 
   Widget _buildPostContent() {
     switch (widget.post.content.type) {
@@ -27,9 +55,19 @@ class _PostViewState extends State<PostView> {
         return _buildPostContentText();
       case PostContentType.image:
         return _buildPostContentImage();
+      case PostContentType.link:
+        return _buildPostContentLink();
       default:
         return Text("Some other form of content.");
     }
+  }
+
+  Widget _buildPostContentLink() {
+    return InkWell(
+      child: Text("Go to link... (${widget.post.content.data})",
+          style: TextStyle(color: Colors.grey)),
+      onTap: () => launch(widget.post.content.data),
+    );
   }
 
   Widget _buildPostContentImage() {
@@ -57,19 +95,17 @@ class _PostViewState extends State<PostView> {
 
     Widget _scoreBlock = _buildControlBlock(
         icon: Icons.arrow_upward, value: widget.post.score.toString());
-    Widget _submitterBlock = _buildControlBlock(
-        icon: Icons.person, value: widget.post.submitter.username);
+    Widget _submitterBlock =
+        _buildControlBlock(icon: Icons.person, value: widget.post.submitter);
     Widget _dateBlock = _buildControlBlock(
         icon: Icons.calendar_today,
         value: DateFormat.yMd('nl').format(widget.post.submissionDate));
 
+    Widget _commentsBlock = _buildControlBlock(icon: Icons.textsms, value: widget.post.comments.length.toString());
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        _scoreBlock,
-        _submitterBlock,
-        _dateBlock
-      ],
+      children: <Widget>[_scoreBlock, _submitterBlock, _dateBlock, _commentsBlock],
     );
   }
 
@@ -85,11 +121,7 @@ class _PostViewState extends State<PostView> {
             color: Colors.teal[300],
             child: new Padding(
               padding: const EdgeInsets.all(8.0),
-              child: new Row(
-                children: <Widget>[
-                  _buildPostTitle(),
-                ],
-              ),
+              child: _buildPostTitle(),
             ),
           ),
           _buildPostContent(),

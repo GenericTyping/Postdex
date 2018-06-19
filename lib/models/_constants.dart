@@ -1,10 +1,20 @@
+import 'dart:async';
+
 import 'package:draw/draw.dart';
+
+// REMOVE THIS
 import 'package:postdex/_credentials.dart';
+
+// DEFINE THESE YOURSELF:
+
+// String kClientId;
+// String kSecret;
+// String kAgentName;
 
 class Constants {
   static Reddit reddit;
 
-  static void initializeRedditUser(String username, String password) async {
+  static Future<Null> initializeRedditUser(String username, String password) async {
     Constants.reddit = await Reddit.createInstance(
       clientId: kClientId,
       clientSecret: kSecret,

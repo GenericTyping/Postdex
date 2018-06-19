@@ -8,6 +8,9 @@ import 'package:postdex/pages/home_page.dart';
 enum AuthState { Idle, Authenticating, Success, Failed }
 
 class AuthPage extends StatefulWidget {
+    static Route<dynamic> get route =>
+      MaterialPageRoute(builder: (context) => AuthPage());
+
   @override
   _AuthPageState createState() => _AuthPageState();
 }
@@ -30,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
           await Constants.initializeRedditUser(_username, _password);
           setState(() => authState = AuthState.Success);
           await Future.delayed(Duration(seconds: 2));
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.of(context).pushReplacement(HomePage.route);
         } catch (e) {
           // Not catching exceptions correctly.
           setState(() => authState = AuthState.Failed);
